@@ -1,15 +1,16 @@
 import numpy as np
 import random
 
-from exercise_5_12.environment import get_starting_state, get_reward, get_possible_actions
+from environments.racing_track import RacingTrack
 from table import Table
 
 epsilon = 0.1
+env = RacingTrack()
 
 
 def behavior_policy(Q, state):
     if random.random() <= epsilon:
-        actions = get_possible_actions(state)
+        actions = env.get_actions(state)
         return random.choice(actions)
 
     return target_policy(Q, state)
@@ -17,13 +18,13 @@ def behavior_policy(Q, state):
 
 def action_conditional_prob(Q, state, action):
     prob = 1 - epsilon if action == target_policy(Q, state) else 0
-    actions = get_possible_actions(state)
+    actions = env.get_actions(state)
     prob += epsilon * 1 / len(actions)
     return prob
 
 
 def target_policy(Q, state):
-    actions = get_possible_actions(state)
+    actions = env.get_actions(state)
 
     values = []
     for action in actions:
@@ -40,7 +41,7 @@ def algorithm():
     Q = Table()
     C = Table()
     discounting_factor = 1
-
+    env = RacingTrack()
     rewards_over_episodes = []
     k = 1
     episodes = 100000
@@ -49,13 +50,13 @@ def algorithm():
         if k % 1000 == 0:
             print("episode no. {}".format(k))
 
-        states = [get_starting_state()]
+        states = [env.get_initial_states()]
         actions = []
         rewards = []
 
         for i in range(T + 1):
             actions.append(behavior_policy(Q, states[-1]))
-            state, reward = get_reward(states[-1], actions[-1])
+            state, reward = env.take_action(states[-1], actions[-1])
             rewards.append(reward)
             states.append(state)
 

@@ -3,14 +3,13 @@ from matplotlib import pyplot as plt
 from table import Table
 import pandas as pd
 from exercise_5_12.algorithm import algorithm
-
-from exercise_5_12 import environment
+from environments.racing_track import RacingTrack
 
 pd.set_option('display.max_columns', None)  # Display all columns
 pd.set_option('display.max_rows', None)  # Display all rows
 
 Q_TABLE_FILE_NAME = 'exercise_5_12/q_table.csv'
-
+env = RacingTrack()
 
 def learn():
     rewards, Q = algorithm()
@@ -25,19 +24,16 @@ def learn():
 
 
 def play():
-    starting_state = environment.get_starting_state()
+    state = env.get_initial_states()
     df = pd.read_csv(Q_TABLE_FILE_NAME)
     T = 0
-    state = starting_state
     steps = set()
     while T < 30:
         steps.add(state[0])
-        board_position = environment.racetrack_turn[state[0][0]][state[0][1]]
-        if board_position == environment.e:
+        if state in env.get_goal_states():
             break
 
         T += 1
-
         actions_df = df[
             (df['position_h'] == state[0][0]) &
             (df['position_v'] == state[0][1]) &
@@ -53,12 +49,12 @@ def play():
         i = numpy.argmax(values)
         picked_action = actions[i]
 
-        state, _ = environment.get_reward(state, picked_action)
+        state, _ = env.take_action(state, picked_action)
     return steps
 
 
 def visualize(steps):
-    board = environment.racetrack_turn
+    board = env.get_board()
     for i in range(len(board)):
         print('\n\t', end='  ')
         for j in range(len(board[0])):
