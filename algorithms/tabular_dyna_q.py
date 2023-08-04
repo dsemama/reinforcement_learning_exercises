@@ -74,27 +74,3 @@ class DeterministicModel(Model):
 
     def get_visited_state_action_pair(self):
         return random.choice(list(self.visited))
-
-
-class EpsilonGreedyPolicy(Policy):
-    def __init__(self, env: Environment, epsilon: int, q_table: Table):
-        self.env = env
-        self.q_table = q_table
-        self.epsilon = epsilon
-
-    def get_action(self, state: object):
-        actions = self.env.get_actions(state)
-        if random.random() <= self.epsilon:
-            return random.choice(actions)
-
-        indexes = []
-        max_value = float('-inf')
-        for i in range(len(actions)):
-            value = self.q_table.get(state, actions[i], 0)
-            if value > max_value:
-                max_value = value
-                indexes = [i]
-            elif value == max_value:
-                indexes.append(i)
-
-        return actions[random.choice(indexes)]

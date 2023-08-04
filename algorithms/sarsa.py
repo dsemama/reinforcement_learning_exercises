@@ -1,24 +1,25 @@
 from table import Table
 from environment import Environment
 from algorithm import Algorithm
+from policy import Policy
 import random
 
 
 # on-policy TD(0) control
 class Sarsa(Algorithm):
-    def __init__(self, env: Environment, step_size: float, exploration_rate: float, episodes: int,
+    def __init__(self, env: Environment, policy: Policy, q_table: Table, step_size: float, episodes: int,
                  steps_on_each_episode: int, discounting_factor: float):
         self.env = env
         self.step_size = step_size
-        self.exploration_rate = exploration_rate
         self.episodes = episodes
         self.steps_on_each_episode = steps_on_each_episode
         self.discounting_factor = discounting_factor
-        self.q = Table()
+        self.policy = policy
+        self.q_table = q_table
 
-    def execute(self, debug=False) -> (list, Table):
+    def execute(self, debug=False) -> list:
         env = self.env
-        q = self.q
+        q = self.q_table
 
         episode = 0
         steps_on_each_episode = []
@@ -28,12 +29,12 @@ class Sarsa(Algorithm):
                 print("episode no. {}".format(episode))
 
             state = random.choice(env.get_initial_states())
-            action = self._epsilon_greedy_policy(state)
+            action = self.policy.get_action(state)
             step = 0
             while step < self.steps_on_each_episode:
                 step += 1
                 next_state, reward = env.take_action(state, action)
-                next_action = self._epsilon_greedy_policy(next_state)
+                next_action = self.policy.get_action(next_state)
 
                 s = state
                 a = action
@@ -53,19 +54,4 @@ class Sarsa(Algorithm):
                 action = next_action
             steps_on_each_episode.append(step)
 
-        return steps_on_each_episode, q
-
-    def _epsilon_greedy_policy(self, state: object):
-        actions = self.env.get_actions(state)
-        if random.random() <= self.exploration_rate:
-            return random.choice(actions)
-
-        best_action = None
-        max_value = float('-inf')
-        for action in actions:
-            value = self.q.get(state, action, 0)
-            if value > max_value:
-                max_value = value
-                best_action = action
-
-        return best_action
+        return steps_on_each_episode

@@ -4,6 +4,7 @@ import numpy
 import random
 from matplotlib import pyplot as plt
 from exercise_6_9.windy_gridworld import WindyGridworld
+from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
 from table import Table
 from algorithms.sarsa import Sarsa
 from environment import Environment
@@ -16,22 +17,25 @@ Q_TABLE_FILE_NAME = 'exercise_6_9/q_table.csv'
 
 
 def learn(env: Environment, q_table_filename: str = Q_TABLE_FILE_NAME):
+    q_table = Table()
     algo = Sarsa(
-        env=env,
         step_size=0.5,
-        exploration_rate=0.1,
         episodes=100000,
         steps_on_each_episode=100,
-        discounting_factor=1)
+        discounting_factor=1,
+        env=env,
+        q_table=q_table,
+        policy=EpsilonGreedyPolicy(env=env, q_table=q_table, exploration_rate=0.1)
+    )
 
-    steps, Q = algo.execute(debug=True)
+    steps = algo.execute(debug=True)
     plt.plot(range(len(steps)), steps)
     plt.xlabel('Episodes')
     plt.ylabel('Steps')
     plt.title('Reward convergence')
     plt.show(block=True)
 
-    pd.DataFrame(_as_data(Q)).to_csv(q_table_filename, index=False)
+    pd.DataFrame(_as_data(q_table)).to_csv(q_table_filename, index=False)
 
 
 def play(env: Environment, q_table_filename: str = Q_TABLE_FILE_NAME) -> Set[Tuple[int, int]]:

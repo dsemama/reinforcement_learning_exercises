@@ -4,7 +4,8 @@ import numpy
 import random
 from matplotlib import pyplot as plt
 from table import Table
-from algorithms.tabular_dyna_q import TabularDynaQ, DeterministicModel, EpsilonGreedyPolicy
+from algorithms.tabular_dyna_q import TabularDynaQ, DeterministicModel
+from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
 from environment import Environment
 from model import Model
 from exercise_8_4.simple_maze import SimpleMaze
@@ -18,7 +19,7 @@ Q_TABLE_FILE_NAME = 'exercise_8_4/q_table.csv'
 
 def learn(env: Environment, model: Model, q_table_filename: str = Q_TABLE_FILE_NAME):
     q_table = Table(timestamp_threshold=0, bonus_factor=0.1)
-    policy = EpsilonGreedyPolicy(env, epsilon=0.1, q_table=q_table)
+    policy = EpsilonGreedyPolicy(env, exploration_rate=0.1, q_table=q_table)
     model = model
     algo = TabularDynaQ(
         env=env,

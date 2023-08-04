@@ -56,13 +56,3 @@ class NStepTDForEstimation(Algorithm):
                         G = math.pow(d, k - K - 1) * rewards[k - K - 1]
                     if K + n < T:
                         G += math.pow(d, n) * q.get(state)
-
-
-
-
-class RandomWalkPolicy(Policy):
-    def __init__(self, env: Environment):
-        self.env = env
-
-    def get_action(self, state):
-        return random.choice(self.env.get_actions(state))
