@@ -8,7 +8,7 @@ from algorithms.tabular_dyna_q import TabularDynaQ, DeterministicModel
 from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
 from environment import Environment
 from model import Model
-from exercise_8_4.simple_maze import SimpleMaze
+from environments.simple_maze import SimpleMaze
 import pandas as pd
 
 pd.set_option('display.max_columns', None)  # Display all columns

@@ -3,7 +3,7 @@ from typing import Dict, List, Any, Set, Union, Tuple
 import numpy
 import random
 from matplotlib import pyplot as plt
-from exercise_6_9.windy_gridworld import WindyGridworld
+from environments.windy_gridworld import WindyGridworld
 from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
 from table import Table
 from algorithms.sarsa import Sarsa

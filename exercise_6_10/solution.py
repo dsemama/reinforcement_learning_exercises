@@ -1,5 +1,5 @@
 from exercise_6_9.solution import learn, play, visualize
-from exercise_6_9.windy_gridworld import WindyGridworld
+from environments.windy_gridworld import WindyGridworld
 
 Q_TABLE_FILENAME='exercise_6_10/q_table'
 

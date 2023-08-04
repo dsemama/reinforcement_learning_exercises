@@ -3,7 +3,7 @@ from typing import List
 from environment import Environment
 
 
-class RandomWalk(Environment):
+class RandomWalkStraightLine(Environment):
 
     def __init__(self, states: int, left_terminal_state_reward: int, right_terminal_state_reward: int):
         assert states % 2 == 1
