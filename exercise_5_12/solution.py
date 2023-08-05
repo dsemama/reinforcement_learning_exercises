@@ -2,8 +2,10 @@ import numpy
 from matplotlib import pyplot as plt
 from table import Table
 import pandas as pd
-from exercise_5_12.algorithm import algorithm
 from environments.racing_track import RacingTrack
+from algorithms.off_policy_mc_control import OffPolicyMCControl
+from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
+from policies.greedy_policy import GreedyPolicy
 
 pd.set_option('display.max_columns', None)  # Display all columns
 pd.set_option('display.max_rows', None)  # Display all rows
@@ -11,8 +13,17 @@ pd.set_option('display.max_rows', None)  # Display all rows
 Q_TABLE_FILE_NAME = 'exercise_5_12/q_table.csv'
 env = RacingTrack()
 
+
 def learn():
-    rewards, Q = algorithm()
+    exploration_rate = 0.1
+    q_table = Table()
+    algo = OffPolicyMCControl(
+        env=RacingTrack(),
+        q_table=q_table,
+        target_policy=GreedyPolicy(env=env, q_table=q_table),
+        behavior_policy=EpsilonGreedyPolicy(env=env, q_table=q_table, exploration_rate=exploration_rate),
+        exploration_rate=exploration_rate)
+    rewards, Q = algo.execute(True)
 
     plt.plot(range(len(rewards)), rewards)
     plt.xlabel('Episodes')
