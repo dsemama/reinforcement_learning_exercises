@@ -1,3 +1,5 @@
+import random
+
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
@@ -44,21 +46,21 @@ class RacingTrackAgent(Agent):
         pd.DataFrame(self._format_q_table()).to_csv(self.storage_path, index=False)
 
     def play(self, visualize=False):
-        state = self.env.get_initial_states()
+        state = random.choice(list(self.env.get_initial_states()))
         df = pd.read_csv(self.storage_path)
         T = 0
         steps = set()
         while T < 30:
-            steps.add(state[0])
+            steps.add(state.position)
             if state in self.env.get_goal_states():
                 break
 
             T += 1
             actions_df = df[
-                (df['position_h'] == state[0][0]) &
-                (df['position_v'] == state[0][1]) &
-                (df['velocity_h'] == state[1][0]) &
-                (df['velocity_v'] == state[1][1])]
+                (df['position_h'] == state.position[0]) &
+                (df['position_v'] == state.position[1]) &
+                (df['velocity_h'] == state.velocity[0]) &
+                (df['velocity_v'] == state.velocity[1])]
 
             actions_h = actions_df['action_h'].values
             actions_v = actions_df['action_v'].values

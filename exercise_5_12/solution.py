@@ -1,4 +1,4 @@
-from racing_track_agent import RacingTrackAgent
+from exercise_5_12.racing_track_agent import RacingTrackAgent
 
 
 def solution():

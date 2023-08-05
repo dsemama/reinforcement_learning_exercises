@@ -1,4 +1,4 @@
-from windy_gridworld_agent import WindyGridWorldAgent
+from exercise_6_9.windy_gridworld_agent import WindyGridWorldAgent
 
 
 def solution():

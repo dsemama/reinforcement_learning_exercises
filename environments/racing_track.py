@@ -65,7 +65,7 @@ class RacingTrack(Environment):
 
         self.actions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
 
-    def get_initial_states(self) -> list:
+    def get_initial_states(self) -> List[RacingTrackState]:
         return self.initial_states
 
     def get_goal_states(self) -> list:
@@ -83,7 +83,7 @@ class RacingTrack(Environment):
 
         reward = -1
         if n < 0 or n >= self.rows or m < 0 or m >= self.columns or racetrack_turn[n][m] == BORDER_SYMBOL:
-            new_state = random.choice(self.get_initial_states())
+            new_state = random.choice(list(self.get_initial_states()))
         elif racetrack_turn[n][m] == e:
             reward = 0
 

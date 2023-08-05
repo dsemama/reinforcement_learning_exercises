@@ -71,9 +71,9 @@ class SimpleMazeAgent(Agent):
         for i in range(len(board)):
             print('\n\t', end='  ')
             for j in range(len(board[0])):
-                if (i, j) in env.get_goal_states():
+                if (i, j) in self.env.get_goal_states():
                     print('G', end='  ')
-                elif (i, j) in env.get_initial_states():
+                elif (i, j) in self.env.get_initial_states():
                     print('S', end='  ')
                 elif (i, j) in steps:
                     print('*', end='  ')
