@@ -102,7 +102,7 @@ class RacingTrackAgent(Agent):
             vel_v.append(state[1][1])
             action_h.append(action[0])
             action_v.append(action[1])
-            values.append(q.get(state, action))
+            values.append(self.q_table.get(state, action))
 
         return {
             'position_h': pos_h,
