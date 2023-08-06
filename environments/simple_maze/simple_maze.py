@@ -2,6 +2,7 @@ import random
 from typing import List
 
 from environment import Environment
+from environments.simple_maze.simple_maze_state import SimpleMazeState
 
 board = [
     [' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X', 'G'],
@@ -24,9 +25,9 @@ class SimpleMaze(Environment):
         for i in range(self.n):
             for j in range(self.m):
                 if board[i][j] == 'S':
-                    self.initial_states.append((i, j))
+                    self.initial_states.append(SimpleMazeState(i, j))
                 elif board[i][j] == 'G':
-                    self.goal_states.append((i, j))
+                    self.goal_states.append(SimpleMazeState(i, j))
 
     def get_initial_states(self) -> list:
         return self.initial_states
@@ -34,7 +35,7 @@ class SimpleMaze(Environment):
     def get_goal_states(self) -> list:
         return self.goal_states
 
-    def take_action(self, current_state, action) -> (object, int):
+    def take_action(self, current_state: SimpleMazeState, action) -> (object, int):
         if current_state in self.goal_states:
             return random.choice(self.initial_states), 0
 
@@ -44,7 +45,7 @@ class SimpleMaze(Environment):
         reward = 1 if next_state in self.goal_states else 0
         return next_state, reward
 
-    def get_actions(self, state) -> list:
+    def get_actions(self, state: SimpleMazeState) -> list:
         possible_actions = []
         for action in self.actions:
             if self._is_valid_action(state, action):
@@ -52,7 +53,7 @@ class SimpleMaze(Environment):
 
         return possible_actions
 
-    def _is_valid_action(self, state, action):
+    def _is_valid_action(self, state: SimpleMazeState, action):
         i, j = self._next_state(state, action)
         return 0 <= i < self.n and 0 <= j < self.m and board[i][j] != 'X'
 
@@ -60,5 +61,5 @@ class SimpleMaze(Environment):
         return board
 
     @staticmethod
-    def _next_state(state, action):
-        return state[0] + action[0], state[1] + action[1]
+    def _next_state(state: SimpleMazeState, action):
+        return state.i + action[0], state.j + action[1]

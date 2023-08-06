@@ -1,6 +1,7 @@
 import random
-from typing import List, Tuple
+from typing import List
 from environment import Environment
+from environments.racing_track.racing_track_state import RacingTrackState
 
 ROAD_SYMBOL = x = "road"
 STARTING_POINT_SYMBOL = s = "starting points"
@@ -35,12 +36,6 @@ racetrack_turn = [
     [0, 0, 0, 0, x, x, x, x, x, x, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, s, s, s, s, s, s, 0, 0, 0, 0, 0, 0, 0],
 ]
-
-
-class RacingTrackState:
-    def __init__(self, position: Tuple[int, int], velocity: Tuple[int, int]):
-        self.position = position
-        self.velocity = velocity
 
 
 class RacingTrack(Environment):
