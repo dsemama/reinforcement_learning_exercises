@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from state import State
 
@@ -8,11 +8,11 @@ class SimpleMazeState(State):
         self.i = i
         self.j = j
 
-    def encode(self) -> List[int]:
-        return [self.i, self.j]
+    def encode(self) -> Tuple[int]:
+        return self.i, self.j
 
     @staticmethod
-    def decode(decoded_state: List[int]) -> 'SimpleMazeState':
+    def decode(decoded_state: Tuple[int]) -> 'SimpleMazeState':
         return SimpleMazeState(decoded_state[0], decoded_state[1])
 
     def get_features_dimension(self) -> int:
@@ -22,3 +22,6 @@ class SimpleMazeState(State):
         if isinstance(other, SimpleMazeState):
             return self.encode() == other.encode()
         return False
+
+    def __hash__(self):
+        return hash(self.encode())

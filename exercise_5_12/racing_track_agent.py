@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 from agent import Agent
-from environments.racing_track import RacingTrack
+from environments.racing_track.racing_track import RacingTrack
 from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
 from policies.greedy_policy import GreedyPolicy
 from algorithms.off_policy_mc_control import OffPolicyMCControl

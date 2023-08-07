@@ -54,12 +54,12 @@ class SimpleMaze(Environment):
         return possible_actions
 
     def _is_valid_action(self, state: SimpleMazeState, action):
-        i, j = self._next_state(state, action)
-        return 0 <= i < self.n and 0 <= j < self.m and board[i][j] != 'X'
+        next_state = self._next_state(state, action)
+        return 0 <= next_state.i < self.n and 0 <= next_state.j < self.m and board[next_state.i][next_state.j] != 'X'
 
     def get_board(self) -> List[List[int]]:
         return board
 
     @staticmethod
     def _next_state(state: SimpleMazeState, action):
-        return state.i + action[0], state.j + action[1]
+        return SimpleMazeState(state.i + action[0], state.j + action[1])

@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from table import Table
 from agent import Agent
 from algorithms.sarsa import Sarsa
-from environments.windy_gridworld import WindyGridworld
+from environments.windy_gridworld.windy_gridworld import WindyGridworld
 from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
 
 

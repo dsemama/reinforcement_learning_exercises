@@ -6,7 +6,8 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 from agent import Agent
-from environments.simple_maze import SimpleMaze
+from environments.simple_maze.simple_maze import SimpleMaze
+from environments.simple_maze.simple_maze_state import SimpleMazeState
 from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
 from algorithms.tabular_dyna_q import TabularDynaQ, DeterministicModel
 from table import Table
@@ -71,11 +72,12 @@ class SimpleMazeAgent(Agent):
         for i in range(len(board)):
             print('\n\t', end='  ')
             for j in range(len(board[0])):
-                if (i, j) in self.env.get_goal_states():
+                state = SimpleMazeState(i, j)
+                if state in self.env.get_goal_states():
                     print('G', end='  ')
-                elif (i, j) in self.env.get_initial_states():
+                elif state in self.env.get_initial_states():
                     print('S', end='  ')
-                elif (i, j) in steps:
+                elif state in steps:
                     print('*', end='  ')
                 else:
                     print('-', end='  ')
@@ -88,8 +90,9 @@ class SimpleMazeAgent(Agent):
         values = []
 
         for state, action in self.q_table.get_keys():
-            pos_h.append(state[0])
-            pos_v.append(state[1])
+            encoded_state = state.encode()
+            pos_h.append(encoded_state[0])
+            pos_v.append(encoded_state[1])
             action_h.append(action[0])
             action_v.append(action[1])
             values.append(self.q_table.get(state, action))
@@ -104,9 +107,10 @@ class SimpleMazeAgent(Agent):
 
     @staticmethod
     def _get_action_values(df, state):
+        encoded_state = state.encode()
         actions_df = df[
-            (df['position_h'] == state[0]) &
-            (df['position_v'] == state[1])]
+            (df['position_h'] == encoded_state[0]) &
+            (df['position_v'] == encoded_state[1])]
         actions_h = actions_df['action_h'].values
         actions_v = actions_df['action_v'].values
         actions = list(zip(actions_h, actions_v))
