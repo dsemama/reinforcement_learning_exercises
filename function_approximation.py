@@ -8,5 +8,5 @@ class FunctionApproximation(ABC):
         pass
 
     @abstractmethod
-    def derivative_eval(self, features, params, derivative_param_index) -> float:
+    def derivative_eval(self, features, params) -> float:
         pass
