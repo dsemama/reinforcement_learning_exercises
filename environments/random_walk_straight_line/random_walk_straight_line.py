@@ -42,3 +42,9 @@ class RandomWalkStraightLine(Environment):
 
     def get_board(self) -> List[List[int]]:
         assert False, "not supported"
+
+    def get_features_set(self, state, action):
+        features_set = []
+        features_set += state.encode()
+        features_set.append(action == 'left')
+        return features_set

@@ -14,6 +14,10 @@ class State(ABC):
         pass
 
     @abstractmethod
+    def get_feature_set(self, action) -> List[float]:
+        pass
+
+    @abstractmethod
     def get_features_dimension(self) -> int:
         pass
 

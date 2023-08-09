@@ -39,7 +39,6 @@ racetrack_turn = [
 
 
 class RacingTrack(Environment):
-
     def __init__(self):
         self.initial_states = set()
         self.terminal_states = set()
@@ -99,3 +98,10 @@ class RacingTrack(Environment):
 
     def get_board(self) -> List[List[int]]:
         return racetrack_turn
+
+    def get_features_set(self, state, action):
+        features_set = []
+        features_set += state.encode()
+        features_set.append(action[0])
+        features_set.append(action[1])
+        return features_set

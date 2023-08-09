@@ -63,3 +63,10 @@ class SimpleMaze(Environment):
     @staticmethod
     def _next_state(state: SimpleMazeState, action):
         return SimpleMazeState(state.i + action[0], state.j + action[1])
+
+    def get_features_set(self, state, action):
+        features_set = []
+        features_set += state.encode()
+        features_set.append(action[0])
+        features_set.append(action[1])
+        return features_set

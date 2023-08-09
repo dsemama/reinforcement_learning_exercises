@@ -48,11 +48,11 @@ class NStepTDForEstimation(Algorithm):
                     rewards.append(reward)
 
                     if next_state in env.get_goal_states():
-                        T = t+1
+                        T = t + 1
 
                 K = t - n + 1
                 if K >= 0:
-                    for k in range(K+1, min(K+n, T)+1):
+                    for k in range(K + 1, min(K + n, T) + 1):
                         G = math.pow(d, k - K - 1) * rewards[k - K - 1]
                     if K + n < T:
                         G += math.pow(d, n) * q.get(state)

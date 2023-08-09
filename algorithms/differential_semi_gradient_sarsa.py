@@ -34,7 +34,7 @@ class DifferentialSemiGradientSarsa(Algorithm):
         average_reward = 0
         for i in range(self.episodes):
 
-            if debug and i+1 % 1001 == 0:
+            if debug and i + 1 % 1001 == 0:
                 print("episode {}".format(i))
 
             next_state, reward = self.env.take_action(state, action)
@@ -42,12 +42,11 @@ class DifferentialSemiGradientSarsa(Algorithm):
 
             steps.append(self.function_approximation.eval(state, action, weights))
 
-            error = reward - average_reward + self.function_approximation.eval(next_state, next_action, weights) - self.function_approximation.eval(state, action, weights)
+            error = reward - average_reward + self.function_approximation.eval(next_state, next_action,
+                                                                               weights) - self.function_approximation.eval(
+                state, action, weights)
             average_reward += self.average_reward_step_size * error
             weights += self.step_size * error * self.function_approximation.derivative_eval(state, action, weights)
 
             state = next_state
             action = next_action
-
-
-

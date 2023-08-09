@@ -43,7 +43,8 @@ class WindyGridworld(Environment):
         return self.goal_states
 
     def take_action(self, current_state: WindyGridworldState, action):
-        if self._is_inside_the_board(current_state) and self.board[current_state.i][current_state.j] in self.goal_states:
+        if self._is_inside_the_board(current_state) and self.board[current_state.i][
+            current_state.j] in self.goal_states:
             return current_state, 0
 
         return self._move(current_state, action), -1
@@ -72,3 +73,10 @@ class WindyGridworld(Environment):
 
     def _is_inside_the_board(self, state: WindyGridworldState):
         return 0 <= state.i <= self.n - 1 and 0 <= state.j <= self.m - 1
+
+    def get_features_set(self, state, action):
+        features_set = []
+        features_set += state.encode()
+        features_set.append(action[0])
+        features_set.append(action[1])
+        return features_set

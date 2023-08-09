@@ -26,3 +26,6 @@ class Environment(ABC):
     def get_board(self) -> List[List[int]]:
         pass
 
+    @abstractmethod
+    def get_features_set(self, state, action):
+        pass
