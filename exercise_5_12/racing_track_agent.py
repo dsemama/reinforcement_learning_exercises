@@ -7,7 +7,7 @@ import numpy as np
 from agent import Agent
 from environments.racing_track.racing_track import RacingTrack
 from policies.epsilon_greedy_policy import EpsilonGreedyPolicy
-from policies.greedy_policy import GreedyPolicy
+from policies.greedy_policy_for_tabular_data import GreedyPolicyForTabularData
 from algorithms.off_policy_mc_control import OffPolicyMCControl
 from table import Table
 
@@ -19,7 +19,7 @@ class RacingTrackAgent(Agent):
         self.exploration_rate = exploration_rate
 
         self.exploration_rate = exploration_rate
-        self.target_policy = GreedyPolicy(env=self.env, q_table=self.q_table)
+        self.target_policy = GreedyPolicyForTabularData(env=self.env, q_table=self.q_table)
         self.behavior_policy = EpsilonGreedyPolicy(env=self.env,
                                                    q_table=self.q_table,
                                                    exploration_rate=self.exploration_rate)

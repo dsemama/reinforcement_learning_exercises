@@ -1,22 +1,19 @@
 import random
 from policy import Policy
 from environment import Environment
+from deprecated import deprecated
 from table import Table
 
 
-class EpsilonGreedyPolicy(Policy):
+@deprecated("it doesn't support function approximation")
+class GreedyPolicyForTabularData(Policy):
 
-    def __init__(self, env: Environment, q_table: Table, exploration_rate: int):
-        self.exploration_rate = exploration_rate
+    def __init__(self, env: Environment, q_table: Table):
         self.env = env
         self.q_table = q_table
 
     def get_action(self, state, weights=None):
-        actions = self.env.get_actions(state)
-        if random.random() <= self.exploration_rate:
-            return random.choice(actions)
-
-        return self._get_action_with_highest_value(state, actions)
+        return self._get_action_with_highest_value(state, self.env.get_actions(state))
 
     def _get_action_with_highest_value(self, state, actions: list):
         best_action = None
