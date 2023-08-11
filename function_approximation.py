@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from typing import List
 
 
 class FunctionApproximation(ABC):
@@ -8,5 +9,5 @@ class FunctionApproximation(ABC):
         pass
 
     @abstractmethod
-    def derivative_eval(self, features, params) -> float:
+    def derivative_eval(self, features, params) -> List[float]:
         pass

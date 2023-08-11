@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 import numpy as np
 import random
@@ -25,21 +25,22 @@ class DifferentialSemiGradientQLearning(Algorithm):
         self.step_size = step_size
         self.average_reward_step_size = average_reward_step_size
         self.episodes = episodes
+        self.weights = None
 
         # Q Learning is an off-policy algorithm, we always take the best action
         # regardless of the action picked using the behavior_policy
         self.greedy_policy = GreedyPolicy(self.env, self.function_approximation)
 
-    def execute(self, debug=False) -> List[float]:
+    def execute(self, debug=False) -> List[Any]:
         state = random.choice(self.env.get_initial_states())
         action = self.behaviour_policy.get_action(state)
         features_set = self.env.get_features_set(state, action)
 
         steps = []
-        weights = np.zeros(len(features_set))
+        self.weights = np.random.rand(len(features_set))
         average_reward = 0
         for i in range(self.episodes):
-            steps.append(self.function_approximation.eval(features_set, weights))
+            steps.append(self.weights.tolist())
 
             if debug and i + 1 % 1001 == 0:
                 print("episode {}".format(i))
@@ -48,11 +49,11 @@ class DifferentialSemiGradientQLearning(Algorithm):
             next_action = self.behaviour_policy.get_action(next_state)
 
             error = self._take_error_step(
-                state=state,
+                next_state=next_state,
                 fs=features_set,
                 r=reward,
                 avg_r=average_reward,
-                w=weights,
+                w=self.weights,
             )
 
             average_reward = self._take_average_reward_step(
@@ -61,11 +62,11 @@ class DifferentialSemiGradientQLearning(Algorithm):
                 error=error,
             )
 
-            weights = self._take_weights_step(
+            self.weights = self._take_weights_step(
                 step_size=self.step_size,
                 error=error,
                 fs=features_set,
-                w=weights
+                w=self.weights
             )
 
             state = next_state
@@ -73,9 +74,9 @@ class DifferentialSemiGradientQLearning(Algorithm):
             features_set = self.env.get_features_set(state, action)
         return steps
 
-    def _take_error_step(self, state, fs, r, avg_r, w):
-        greedy_pick = self.greedy_policy.get_action(state=state, weights=w)
-        nfs = self.env.get_features_set(state, greedy_pick)
+    def _take_error_step(self, next_state, fs, r, avg_r, w):
+        greedy_pick = self.greedy_policy.get_action(state=next_state, weights=w)
+        nfs = self.env.get_features_set(next_state, greedy_pick)
         return r - avg_r + self.function_approximation.eval(nfs, w) - self.function_approximation.eval(fs, w)
 
     @staticmethod
@@ -83,4 +84,6 @@ class DifferentialSemiGradientQLearning(Algorithm):
         return avg_r + step_size * error
 
     def _take_weights_step(self, step_size, error, fs, w):
-        return w + step_size * error * self.function_approximation.derivative_eval(fs, w)
+        derivative = np.array(self.function_approximation.derivative_eval(fs, w))
+        step = step_size * error * derivative
+        return w + step
