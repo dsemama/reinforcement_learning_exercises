@@ -17,7 +17,7 @@ class BairdsCounterexampleAgent(Agent):
                  storage_path='exercise_11_3/weights.csv',
                  discounting_factor=0.99,
                  step_size=0.9,
-                 episodes=1000):
+                 episodes=100):
         self.env = BairdsCounterexampleEnvironment()
         self.behavior_policy = BehaviorPolicy()
         self.approximation = Approximation()
